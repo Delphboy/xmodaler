@@ -1,0 +1,27 @@
+#!/bin/bash
+#$ -pe smp 4
+#$ -l h_vmem=16G
+#$ -l h_rt=240:0:0
+#$ -l gpu=4
+#$ -l cluster=andrena
+#$ -m eas
+#$ -cwd
+#$ -j y #joins output and error files
+
+# Load modules
+module load python/3.8.5
+module load cudnn/8.1.1-cuda11
+module load cuda/11.0.3
+
+
+# Start python
+virtualenv xmodaler
+source xmodaler/bin/activate
+
+# Install
+pip install -r requirements.txt
+
+# Run!
+python train_net.py --num-gpus 4 \
+ 	--config-file configs/image_caption/gcn/gcn.yaml
+
